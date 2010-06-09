@@ -1,0 +1,417 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3C05C969-31D7-45DA-8149-BED094087EEB}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DotNetOpenAuth.Silverlight</RootNamespace>
+    <AssemblyName>DotNetOpenAuth.Silverlight</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsPlatformPath />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsExtraRewriteOptions />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Contracts">
+      <HintPath>..\..\lib\Silverlight\Microsoft.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\DotNetOpenAuth\Logger.cs">
+      <Link>Logger.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Loggers\ILog.cs">
+      <Link>Loggers\ILog.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Loggers\NoOpLogger.cs">
+      <Link>Loggers\NoOpLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Bindings\ExpiredMessageException.cs">
+      <Link>Messaging\Binding\ExpiredMessageException.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Bindings\IExpiringProtocolMessage.cs">
+      <Link>Messaging\Binding\IExpiringProtocolMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Bindings\INonceStore.cs">
+      <Link>Messaging\Binding\INonceStore.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Bindings\InvalidSignatureException.cs">
+      <Link>Messaging\Binding\InvalidSignatureException.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Bindings\IReplayProtectedProtocolMessage.cs">
+      <Link>Messaging\Binding\IReplayProtectedProtocolMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Bindings\NonceMemoryStore.cs">
+      <Link>Messaging\Binding\NonceMemoryStore.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Bindings\ReplayedMessageException.cs">
+      <Link>Messaging\Binding\ReplayedMessageException.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Bindings\StandardExpirationBindingElement.cs">
+      <Link>Messaging\Binding\StandardExpirationBindingElement.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Bindings\StandardReplayProtectionBindingElement.cs">
+      <Link>Messaging\Binding\StandardReplayProtectionBindingElement.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\CachedDirectWebResponse.cs">
+      <Link>Messaging\CachedDirectWebResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Channel.cs">
+      <Link>Messaging\Channel.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\ChannelContract.cs">
+      <Link>Messaging\ChannelContract.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\ChannelEventArgs.cs">
+      <Link>Messaging\ChannelEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\DirectWebRequestOptions.cs">
+      <Link>Messaging\DirectWebRequestOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\EmptyDictionary.cs">
+      <Link>Messaging\EmptyDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\EmptyEnumerator.cs">
+      <Link>Messaging\EmptyEnumerator.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\EmptyList.cs">
+      <Link>Messaging\EmptyList.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\EnumerableCache.cs">
+      <Link>Messaging\EnumerableCache.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\ErrorUtilities.cs">
+      <Link>Messaging\ErrorUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\HostErrorException.cs">
+      <Link>Messaging\HostErrorException.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\HttpDeliveryMethods.cs">
+      <Link>Messaging\HttpDeliveryMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\HttpRequestInfo.cs">
+      <Link>Messaging\HttpRequestInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IChannelBindingElement.cs">
+      <Link>Messaging\IChannelBindingElement.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IDirectedProtocolMessage.cs">
+      <Link>Messaging\IDirectedProtocolMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IDirectResponseProtocolMessage.cs">
+      <Link>Messaging\IDirectResponseProtocolMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IDirectWebRequestHandler.cs">
+      <Link>Messaging\IDirectWebRequestHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IMessage.cs">
+      <Link>Messaging\IMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IMessageFactory.cs">
+      <Link>Messaging\IMessageFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IMessageWithBinaryData.cs">
+      <Link>Messaging\IMessageWithBinaryData.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IMessageWithEvents.cs">
+      <Link>Messaging\IMessageWithEvents.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IncomingWebResponse.cs">
+      <Link>Messaging\IncomingWebResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IncomingWebResponseContract.cs">
+      <Link>Messaging\IncomingWebResponseContract.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\InternalErrorException.cs">
+      <Link>Messaging\InternalErrorException.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\IProtocolMessage.cs">
+      <Link>Messaging\IProtocolMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\ITamperProtectionChannelBindingElement.cs">
+      <Link>Messaging\ITamperProtectionChannelBindingElement.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\ITamperResistantProtocolMessage.cs">
+      <Link>Messaging\ITamperResistantProtocolMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\MessagePartAttribute.cs">
+      <Link>Messaging\MessagePartAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\MessageProtections.cs">
+      <Link>Messaging\MessageProtections.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\MessageReceivingEndpoint.cs">
+      <Link>Messaging\MessageReceivingEndpoint.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\MessageSerializer.cs">
+      <Link>Messaging\MessageSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\MessageTransport.cs">
+      <Link>Messaging\MessageTransport.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\MessagingStrings.Designer.cs">
+      <Link>Messaging\MessagingStrings.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\MessagingUtilities.cs">
+      <Link>Messaging\MessagingUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\MultipartPostPart.cs">
+      <Link>Messaging\MultipartPostPart.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\OutgoingWebResponse.cs">
+      <Link>Messaging\OutgoingWebResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\ProtocolException.cs">
+      <Link>Messaging\ProtocolException.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Reflection\IMessagePartEncoder.cs">
+      <Link>Messaging\Reflection\IMessagePartEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Reflection\IMessagePartNullEncoder.cs">
+      <Link>Messaging\Reflection\IMessagePartNullEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Reflection\IMessagePartOriginalEncoder.cs">
+      <Link>Messaging\Reflection\IMessagePartOriginalEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Reflection\MessageDescription.cs">
+      <Link>Messaging\Reflection\MessageDescription.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Reflection\MessageDescriptionCollection.cs">
+      <Link>Messaging\Reflection\MessageDescriptionCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Reflection\MessageDictionary.cs">
+      <Link>Messaging\Reflection\MessageDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Reflection\MessagePart.cs">
+      <Link>Messaging\Reflection\MessagePart.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\Reflection\ValueMapping.cs">
+      <Link>Messaging\Reflection\ValueMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\StandardWebRequestHandler.cs">
+      <Link>Messaging\StandardWebRequestHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Messaging\UnprotectedMessageException.cs">
+      <Link>Messaging\UnprotectedMessageException.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\HmacSha1SigningBindingElement.cs">
+      <Link>OAuth\ChannelElements\HmacSha1SigningBindingElement.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\IConsumerDescription.cs">
+      <Link>OAuth\Messages\IConsumerDescription.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\IConsumerTokenManager.cs">
+      <Link>OAuth\ChannelElements\IConsumerTokenManager.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\IServiceProviderAccessToken.cs">
+      <Link>OAuth\Messages\IServiceProviderAccessToken.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\IServiceProviderRequestToken.cs">
+      <Link>OAuth\Messages\IServiceProviderRequestToken.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\IServiceProviderTokenManager.cs">
+      <Link>OAuth\Messages\IServiceProviderTokenManager.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\ITamperResistantOAuthMessage.cs">
+      <Link>OAuth\ChannelElements\ITamperResistantOAuthMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\ITokenManager.cs">
+      <Link>OAuth\ChannelElements\ITokenManager.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\OAuthChannel.cs">
+      <Link>OAuth\ChannelElements\OAuthChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\OAuthConsumerMessageFactory.cs">
+      <Link>OAuth\Messages\OAuthConsumerMessageFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\OAuthHttpMethodBindingElement.cs">
+      <Link>OAuth\ChannelElements\OAuthHttpMethodBindingElement.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\OAuthServiceProviderMessageFactory.cs">
+      <Link>OAuth\Messages\OAuthServiceProviderMessageFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\SigningBindingElementBase.cs">
+      <Link>OAuth\ChannelElements\SigningBindingElementBase.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\SigningBindingElementBaseContract.cs">
+      <Link>OAuth\ChannelElements\SigningBindingElementBaseContract.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\SigningBindingElementChain.cs">
+      <Link>OAuth\ChannelElements\SigningBindingElementChain.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\TokenHandlingBindingElement.cs">
+      <Link>OAuth\ChannelElements\TokenHandlingBindingElement.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\TokenType.cs">
+      <Link>OAuth\ChannelElements\TokenType.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ChannelElements\UriOrOobEncoding.cs">
+      <Link>OAuth\ChannelElements\UriOrOobEncoding.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ConsumerBase.cs">
+      <Link>OAuth\ConsumerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ConsumerSecuritySettings.cs">
+      <Link>OAuth\ConsumerSecuritySettings.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\AccessProtectedResourceRequest.cs">
+      <Link>OAuth\Messages\AccessProtectedResourceRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\AuthorizedTokenRequest.cs">
+      <Link>OAuth\Messages\AuthorizedTokenRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\AuthorizedTokenResponse.cs">
+      <Link>OAuth\Messages\AuthorizedTokenResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\ITokenContainingMessage.cs">
+      <Link>OAuth\Messages\ITokenContainingMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\ITokenSecretContainingMessage.cs">
+      <Link>OAuth\Messages\ITokenSecretContainingMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\MessageBase.cs">
+      <Link>OAuth\Messages\MessageBase.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\SignedMessageBase.cs">
+      <Link>OAuth\Messages\SignedMessageBase.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\UnauthorizedTokenRequest.cs">
+      <Link>OAuth\Messages\UnauthorizedTokenRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\UnauthorizedTokenResponse.cs">
+      <Link>OAuth\Messages\UnauthorizedTokenResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\UserAuthorizationRequest.cs">
+      <Link>OAuth\Messages\UserAuthorizationRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Messages\UserAuthorizationResponse.cs">
+      <Link>OAuth\Messages\UserAuthorizationResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\OAuthStrings.Designer.cs">
+      <Link>OAuth\OAuthStrings.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\Protocol.cs">
+      <Link>OAuth\Protocol.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\ServiceProviderDescription.cs">
+      <Link>OAuth\ServiceProviderDescription.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\OAuth\VerificationCodeFormat.cs">
+      <Link>OAuth\VerificationCodeFormat.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Reporting.cs">
+      <Link>Reporting.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\UriUtil.cs">
+      <Link>UriUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\DotNetOpenAuth\Util.cs">
+      <Link>Util.cs</Link>
+    </Compile>
+    <Compile Include="Configuration\DotNetOpenAuthSection.cs" />
+    <Compile Include="Configuration\MessagingElement.cs" />
+    <Compile Include="Configuration\OAuthConsumerElement.cs" />
+    <Compile Include="Configuration\OAuthConsumerSecuritySettingsElement.cs" />
+    <Compile Include="Configuration\OAuthElement.cs" />
+    <Compile Include="Configuration\OAuthServiceProviderElement.cs" />
+    <Compile Include="Configuration\OAuthServiceProviderSecuritySettingsElement.cs" />
+    <Compile Include="Configuration\ReportingElement.cs" />
+    <Compile Include="EnumHelper.cs" />
+    <Compile Include="OAuth\SilverlightConsumer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HttpExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\DotNetOpenAuth\Messaging\MessagingStrings.resx">
+      <Link>Messaging\MessagingStrings.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\DotNetOpenAuth\Messaging\MessagingStrings.sr.resx">
+      <Link>Messaging\MessagingStrings.sr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\DotNetOpenAuth\OAuth\OAuthStrings.resx">
+      <Link>OAuth\OAuthStrings.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\DotNetOpenAuth\OAuth\OAuthStrings.sr.resx">
+      <Link>OAuth\OAuthStrings.sr.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
