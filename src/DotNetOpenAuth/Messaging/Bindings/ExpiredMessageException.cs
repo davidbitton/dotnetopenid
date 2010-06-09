@@ -12,7 +12,9 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 	/// <summary>
 	/// An exception thrown when a message is received that exceeds the maximum message age limit.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	internal class ExpiredMessageException : ProtocolException {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExpiredMessageException"/> class.
@@ -23,7 +25,7 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 			: base(string.Format(CultureInfo.CurrentCulture, MessagingStrings.ExpiredMessage, utcExpirationDate.ToLocalTime(), DateTime.Now), faultedMessage) {
 			Contract.Requires<ArgumentException>(utcExpirationDate.Kind == DateTimeKind.Utc);
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExpiredMessageException"/> class.
 		/// </summary>
@@ -35,5 +37,6 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 		  System.Runtime.Serialization.SerializationInfo info,
 		  System.Runtime.Serialization.StreamingContext context)
 			: base(info, context) { }
+#endif
 	}
 }

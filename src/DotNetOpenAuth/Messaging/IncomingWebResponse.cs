@@ -11,7 +11,9 @@ namespace DotNetOpenAuth.Messaging {
 	using System.Globalization;
 	using System.IO;
 	using System.Net;
+#if !SILVERLIGHT
 	using System.Net.Mime;
+#endif
 	using System.Text;
 
 	/// <summary>
@@ -39,7 +41,8 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="requestUri">The original request URI.</param>
 		/// <param name="response">The response to initialize from.  The network stream is used by this class directly.</param>
 		protected IncomingWebResponse(Uri requestUri, HttpWebResponse response) {
-			Contract.Requires<ArgumentNullException>(requestUri != null);
+#if !SILVERLIGHT
+            Contract.Requires<ArgumentNullException>(requestUri != null);
 			Contract.Requires<ArgumentNullException>(response != null);
 
 			this.RequestUri = requestUri;
@@ -54,6 +57,7 @@ namespace DotNetOpenAuth.Messaging {
 			this.FinalUri = response.ResponseUri;
 			this.Status = response.StatusCode;
 			this.Headers = response.Headers;
+#endif
 		}
 
 		/// <summary>
@@ -66,6 +70,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="contentType">Type of the content.</param>
 		/// <param name="contentEncoding">The content encoding.</param>
 		protected IncomingWebResponse(Uri requestUri, Uri responseUri, WebHeaderCollection headers, HttpStatusCode statusCode, string contentType, string contentEncoding) {
+#if !SILVERLIGHT
 			Contract.Requires<ArgumentNullException>(requestUri != null);
 
 			this.RequestUri = requestUri;
@@ -80,13 +85,14 @@ namespace DotNetOpenAuth.Messaging {
 			this.ContentEncoding = string.IsNullOrEmpty(contentEncoding) ? DefaultContentEncoding : contentEncoding;
 			this.Headers = headers;
 			this.FinalUri = responseUri;
+#endif
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Gets the type of the content.
 		/// </summary>
 		public ContentType ContentType { get; private set; }
-
+#endif
 		/// <summary>
 		/// Gets the content encoding.
 		/// </summary>
@@ -125,7 +131,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// Gets the body of the HTTP response.
 		/// </summary>
 		public abstract Stream ResponseStream { get; }
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
 		/// </summary>
@@ -146,7 +152,7 @@ namespace DotNetOpenAuth.Messaging {
 
 			return sb.ToString();
 		}
-
+#endif
 		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>

@@ -5,5 +5,9 @@ namespace DotNetOpenAuth.Configuration {
         public TimeSpan MaximumMessageLifetime {
             get { return TimeSpan.Zero; }
         }
+
+        public bool Strict {
+            get { return true; }
+        }
     }
 }

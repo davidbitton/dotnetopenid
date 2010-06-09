@@ -15,11 +15,15 @@ namespace DotNetOpenAuth.Messaging {
 	using System.IO;
 	using System.Linq;
 	using System.Net;
-	using System.Net.Cache;
-	using System.Net.Mime;
 	using System.Text;
 	using System.Threading;
+#if SILVERLIGHT
+    using DotNetOpenAuth.Silverlight;
+#else
+	using System.Net.Cache;
+	using System.Net.Mime;
 	using System.Web;
+#endif
 	using DotNetOpenAuth.Messaging.Reflection;
 
 	/// <summary>
@@ -39,13 +43,17 @@ namespace DotNetOpenAuth.Messaging {
 		/// </summary>
 		protected internal const string HttpFormUrlEncoded = "application/x-www-form-urlencoded";
 
-		/// <summary>
-		/// The content-type used on HTTP POST requests where the POST entity is a
-		/// URL-encoded series of key=value pairs.
-		/// This includes the <see cref="PostEntityEncoding"/> character encoding.
-		/// </summary>
+        /// <summary>
+        /// The content-type used on HTTP POST requests where the POST entity is a
+        /// URL-encoded series of key=value pairs.
+        /// This includes the <see cref="PostEntityEncoding"/> character encoding.
+        /// </summary>
+#if SILVERLIGHT
+	    protected internal static readonly string HttpFormUrlEncodedContentType =
+	        "application/x-www-form-urlencoded; charset=utf-8";
+#else
 		protected internal static readonly ContentType HttpFormUrlEncodedContentType = new ContentType(HttpFormUrlEncoded) { CharSet = PostEntityEncoding.WebName };
-
+#endif
 		/// <summary>
 		/// The maximum allowable size for a 301 Redirect response before we send
 		/// a 200 OK response with a scripted form POST with the parameters instead
@@ -105,12 +113,12 @@ namespace DotNetOpenAuth.Messaging {
 		/// so it can be deserialized.
 		/// </summary>
 		private IMessageFactory messageTypeProvider;
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Backing store for the <see cref="CachePolicy"/> property.
 		/// </summary>
 		private RequestCachePolicy cachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
-
+#endif
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Channel"/> class.
 		/// </summary>
@@ -123,7 +131,9 @@ namespace DotNetOpenAuth.Messaging {
 			Contract.Requires<ArgumentNullException>(messageTypeProvider != null);
 
 			this.messageTypeProvider = messageTypeProvider;
+#if !SILVERLIGHT
 			this.WebRequestHandler = new StandardWebRequestHandler();
+#endif
 			this.outgoingBindingElements = new List<IChannelBindingElement>(ValidateAndPrepareBindingElements(bindingElements));
 			this.incomingBindingElements = new List<IChannelBindingElement>(this.outgoingBindingElements);
 			this.incomingBindingElements.Reverse();
@@ -207,7 +217,7 @@ namespace DotNetOpenAuth.Messaging {
 		protected IMessageFactory MessageFactory {
 			get { return this.messageTypeProvider; }
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Gets or sets the cache policy to use for direct message requests.
 		/// </summary>
@@ -222,7 +232,7 @@ namespace DotNetOpenAuth.Messaging {
 				this.cachePolicy = value;
 			}
 		}
-
+#endif
 		/// <summary>
 		/// Sends an indirect message (either a request or response) 
 		/// or direct message response for transmission to a remote party
@@ -234,9 +244,11 @@ namespace DotNetOpenAuth.Messaging {
 		/// Requires an HttpContext.Current context.
 		/// </remarks>
 		public void Send(IProtocolMessage message) {
+#if !SILVERLIGHT
 			Contract.Requires<InvalidOperationException>(HttpContext.Current != null, MessagingStrings.CurrentHttpContextRequired);
 			Contract.Requires<ArgumentNullException>(message != null);
 			this.PrepareResponse(message).Send();
+#endif
 		}
 
 		/// <summary>
@@ -246,6 +258,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="message">The one-way message to send</param>
 		/// <returns>The pending user agent redirect based message to be sent as an HttpResponse.</returns>
 		public OutgoingWebResponse PrepareResponse(IProtocolMessage message) {
+#if SILVERLIGHT
+            return null;
+#else
 			Contract.Requires<ArgumentNullException>(message != null);
 			Contract.Ensures(Contract.Result<OutgoingWebResponse>() != null);
 
@@ -275,6 +290,7 @@ namespace DotNetOpenAuth.Messaging {
 						"Transport",
 						message.Transport);
 			}
+#endif
 		}
 
 		/// <summary>
@@ -372,6 +388,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="httpRequest">The request to search for an embedded message.</param>
 		/// <returns>The deserialized message, if one is found.  Null otherwise.</returns>
 		public IDirectedProtocolMessage ReadFromRequest(HttpRequestInfo httpRequest) {
+#if SILVERLIGHT
+		    return null;
+#else
 			Contract.Requires<ArgumentNullException>(httpRequest != null);
 
 			if (Logger.Channel.IsInfoEnabled && httpRequest.UrlBeforeRewriting != null) {
@@ -384,6 +403,7 @@ namespace DotNetOpenAuth.Messaging {
 			}
 
 			return requestMessage;
+#endif
 		}
 
 		/// <summary>
@@ -418,6 +438,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// <returns>The remote party's response.  Guaranteed to never be null.</returns>
 		/// <exception cref="ProtocolException">Thrown if the response does not include a protocol message.</exception>
 		public IProtocolMessage Request(IDirectedProtocolMessage requestMessage) {
+#if SILVERLIGHT
+		    return null;
+#else
 			Contract.Requires<ArgumentNullException>(requestMessage != null);
 
 			this.ProcessOutgoingMessage(requestMessage);
@@ -429,6 +452,7 @@ namespace DotNetOpenAuth.Messaging {
 			this.ProcessIncomingMessage(responseMessage);
 
 			return responseMessage;
+#endif
 		}
 
 		#region IDisposable Members
@@ -453,6 +477,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// <exception cref="InvalidOperationException">Thrown if <see cref="HttpContext.Current">HttpContext.Current</see> == <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Costly call should not be a property.")]
 		protected internal virtual HttpRequestInfo GetRequestFromContext() {
+#if SILVERLIGHT
+		    return null;
+#else
 			Contract.Requires<InvalidOperationException>(HttpContext.Current != null && HttpContext.Current.Request != null, MessagingStrings.HttpContextRequired);
 			Contract.Ensures(Contract.Result<HttpRequestInfo>() != null);
 			Contract.Ensures(Contract.Result<HttpRequestInfo>().Url != null);
@@ -462,6 +489,7 @@ namespace DotNetOpenAuth.Messaging {
 			Contract.Assume(HttpContext.Current.Request.Url != null);
 			Contract.Assume(HttpContext.Current.Request.RawUrl != null);
 			return new HttpRequestInfo(HttpContext.Current.Request);
+#endif
 		}
 
 		/// <summary>
@@ -577,6 +605,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="request">The request to search for an embedded message.</param>
 		/// <returns>The deserialized message, if one is found.  Null otherwise.</returns>
 		protected virtual IDirectedProtocolMessage ReadFromRequestCore(HttpRequestInfo request) {
+#if SILVERLIGHT
+		    return null;
+#else
 			Contract.Requires<ArgumentNullException>(request != null);
 
 			Logger.Channel.DebugFormat("Incoming HTTP request: {0} {1}", request.HttpMethod, request.UrlBeforeRewriting.AbsoluteUri);
@@ -597,6 +628,7 @@ namespace DotNetOpenAuth.Messaging {
 			}
 
 			return (IDirectedProtocolMessage)this.Receive(fields, recipient);
+#endif
 		}
 
 		/// <summary>
@@ -632,6 +664,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="message">The message to send.</param>
 		/// <returns>The pending user agent redirect based message to be sent as an HttpResponse.</returns>
 		protected virtual OutgoingWebResponse PrepareIndirectResponse(IDirectedProtocolMessage message) {
+#if SILVERLIGHT
+		    return null;
+#else
 			Contract.Requires<ArgumentNullException>(message != null);
 			Contract.Requires<ArgumentException>(message.Recipient != null, MessagingStrings.DirectedMessageMissingRecipient);
 			Contract.Ensures(Contract.Result<OutgoingWebResponse>() != null);
@@ -649,6 +684,7 @@ namespace DotNetOpenAuth.Messaging {
 			}
 
 			return response;
+#endif
 		}
 
 		/// <summary>
@@ -660,6 +696,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// <returns>The encoded HTTP response.</returns>
 		[Pure]
 		protected virtual OutgoingWebResponse Create301RedirectResponse(IDirectedProtocolMessage message, IDictionary<string, string> fields) {
+#if SILVERLIGHT
+            return null;
+#else
 			Contract.Requires<ArgumentNullException>(message != null);
 			Contract.Requires<ArgumentException>(message.Recipient != null, MessagingStrings.DirectedMessageMissingRecipient);
 			Contract.Requires<ArgumentNullException>(fields != null);
@@ -678,6 +717,7 @@ namespace DotNetOpenAuth.Messaging {
 			};
 
 			return response;
+#endif
 		}
 
 		/// <summary>
@@ -688,6 +728,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="fields">The pre-serialized fields from the message.</param>
 		/// <returns>The encoded HTTP response.</returns>
 		protected virtual OutgoingWebResponse CreateFormPostResponse(IDirectedProtocolMessage message, IDictionary<string, string> fields) {
+#if SILVERLIGHT
+            return null;
+#else
 			Contract.Requires<ArgumentNullException>(message != null);
 			Contract.Requires<ArgumentException>(message.Recipient != null, MessagingStrings.DirectedMessageMissingRecipient);
 			Contract.Requires<ArgumentNullException>(fields != null);
@@ -717,6 +760,7 @@ namespace DotNetOpenAuth.Messaging {
 
 				return response;
 			}
+#endif
 		}
 
 		/// <summary>
@@ -871,8 +915,10 @@ namespace DotNetOpenAuth.Messaging {
 			var fields = messageAccessor.Serialize();
 
 			HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(requestMessage.Recipient);
-			httpRequest.CachePolicy = this.CachePolicy;
-			httpRequest.Method = "POST";
+#if !SILVERLIGHT
+            httpRequest.CachePolicy = this.CachePolicy;
+#endif			
+            httpRequest.Method = "POST";
 
 			var requestMessageWithBinaryData = requestMessage as IMessageWithBinaryData;
 			if (requestMessageWithBinaryData != null && requestMessageWithBinaryData.SendAsMultipart) {
@@ -1082,8 +1128,12 @@ namespace DotNetOpenAuth.Messaging {
 				elements.Where(element => element.Protection != MessageProtections.None));
 
 			bool wasLastProtectionPresent = true;
+#if SILVERLIGHT
+            foreach (MessageProtections protectionKind in EnumHelper.GetValues(typeof(MessageProtections))) {
+#else
 			foreach (MessageProtections protectionKind in Enum.GetValues(typeof(MessageProtections))) {
-				if (protectionKind == MessageProtections.None) {
+#endif
+            if (protectionKind == MessageProtections.None) {
 					continue;
 				}
 

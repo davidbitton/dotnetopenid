@@ -13,9 +13,12 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 	using System.IO;
 	using System.Linq;
 	using System.Net;
+    using System.Text;
+#if !SILVERLIGHT
 	using System.Net.Mime;
-	using System.Text;
+
 	using System.Web;
+#endif
 	using DotNetOpenAuth.Messaging;
 	using DotNetOpenAuth.Messaging.Bindings;
 	using DotNetOpenAuth.Messaging.Reflection;
@@ -116,6 +119,9 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 		/// <param name="request">The HTTP request to search.</param>
 		/// <returns>The deserialized message, if one is found.  Null otherwise.</returns>
 		protected override IDirectedProtocolMessage ReadFromRequestCore(HttpRequestInfo request) {
+#if SILVERLIGHT
+		    return null;
+#else
 			var fields = new Dictionary<string, string>();
 
 			// First search the Authorization header.
@@ -183,6 +189,7 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 			}
 
 			return message;
+#endif
 		}
 
 		/// <summary>
@@ -193,8 +200,12 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 		/// The deserialized message parts, if found.  Null otherwise.
 		/// </returns>
 		protected override IDictionary<string, string> ReadFromResponseCore(IncomingWebResponse response) {
+#if SILVERLIGHT
+		    return null;
+#else
 			string body = response.GetResponseReader().ReadToEnd();
 			return HttpUtility.ParseQueryString(body).ToDictionary();
+#endif
 		}
 
 		/// <summary>
@@ -238,6 +249,9 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 		/// This method implements spec V1.0 section 5.3.
 		/// </remarks>
 		protected override OutgoingWebResponse PrepareDirectResponse(IProtocolMessage response) {
+#if SILVERLIGHT
+		    return null;
+#else
 			var messageAccessor = this.MessageDescriptions.GetAccessor(response);
 			var fields = messageAccessor.Serialize();
 			string responseBody = MessagingUtilities.CreateQueryString(fields);
@@ -255,6 +269,7 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 			}
 
 			return encodedResponse;
+#endif
 		}
 
 		/// <summary>
@@ -357,7 +372,11 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 			}
 			authorization.Length--; // remove trailing comma
 
+#if SILVERLIGHT
+            httpRequest.Headers[HttpRequestHeader.Authorization] = authorization.ToString();
+#else
 			httpRequest.Headers.Add(HttpRequestHeader.Authorization, authorization.ToString());
+#endif
 
 			if (hasEntity) {
 				// WARNING: We only set up the request stream for the caller if there is

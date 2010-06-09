@@ -10,11 +10,13 @@ namespace DotNetOpenAuth.Messaging {
 	using System.Diagnostics.Contracts;
 	using System.IO;
 	using System.Net;
-	using System.Net.Mime;
+
 	using System.Text;
 	using System.Threading;
+#if !SILVERLIGHT
+    using System.Net.Mime;
 	using System.Web;
-
+#endif
 	/// <summary>
 	/// A protocol message (request or response) that passes from this
 	/// to a remote party via the user agent using a redirect or form 
@@ -102,12 +104,15 @@ namespace DotNetOpenAuth.Messaging {
 		/// </summary>
 		internal IProtocolMessage OriginalMessage { get; set; }
 
-		/// <summary>
+        /// <summary>
 		/// Creates a text reader for the response stream.
 		/// </summary>
 		/// <returns>The text reader, initialized for the proper encoding.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Costly operation")]
 		public StreamReader GetResponseReader() {
+#if SILVERLIGHT
+            return null;
+#else
 			this.ResponseStream.Seek(0, SeekOrigin.Begin);
 			string contentEncoding = this.Headers[HttpResponseHeader.ContentEncoding];
 			if (string.IsNullOrEmpty(contentEncoding)) {
@@ -115,6 +120,7 @@ namespace DotNetOpenAuth.Messaging {
 			} else {
 				return new StreamReader(this.ResponseStream, Encoding.GetEncoding(contentEncoding));
 			}
+#endif
 		}
 
 		/// <summary>
@@ -126,11 +132,13 @@ namespace DotNetOpenAuth.Messaging {
 		/// Requires a current HttpContext.
 		/// </remarks>
 		public virtual void Send() {
+#if !SILVERLIGHT
 			Contract.Requires<InvalidOperationException>(HttpContext.Current != null && HttpContext.Current.Request != null, MessagingStrings.HttpContextRequired);
 
 			this.Send(HttpContext.Current);
+#endif
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Automatically sends the appropriate response to the user agent
 		/// and ends execution on the current page or handler.
@@ -177,7 +185,7 @@ namespace DotNetOpenAuth.Messaging {
 
 			response.OutputStream.Close();
 		}
-
+#endif
 		/// <summary>
 		/// Gets the URI that, when requested with an HTTP GET request,
 		/// would transmit the message that normally would be transmitted via a user agent redirect.
@@ -204,7 +212,9 @@ namespace DotNetOpenAuth.Messaging {
 			MessagingUtilities.AppendQueryArgs(builder, fields);
 			return builder.Uri;
 		}
-
+#if SILVERLIGHT
+	    internal void SetResponse(object body, object contenType){}
+#else
 		/// <summary>
 		/// Sets the response to some string, encoded as UTF-8.
 		/// </summary>
@@ -232,5 +242,6 @@ namespace DotNetOpenAuth.Messaging {
 			writer.Flush();
 			this.ResponseStream.Seek(0, SeekOrigin.Begin);
 		}
+#endif
 	}
 }

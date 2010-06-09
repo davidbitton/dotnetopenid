@@ -11,8 +11,10 @@ namespace DotNetOpenAuth {
 	using System.Diagnostics.Contracts;
 	using System.Linq;
 	using System.Text.RegularExpressions;
+#if !SILVERLIGHT
 	using System.Web;
 	using System.Web.UI;
+#endif
 	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
@@ -30,6 +32,9 @@ namespace DotNetOpenAuth {
 		/// </returns>
 		[ContractVerification(false)] // bugs/limitations in CC static analysis
 		internal static bool QueryStringContainPrefixedParameters(this Uri uri, string prefix) {
+#if SILVERLIGHT
+		    return false;
+#else
 			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(prefix));
 			if (uri == null) {
 				return false;
@@ -38,6 +43,7 @@ namespace DotNetOpenAuth {
 			NameValueCollection nvc = HttpUtility.ParseQueryString(uri.Query);
 			Contract.Assume(nvc != null); // BCL
 			return nvc.Keys.OfType<string>().Any(key => key.StartsWith(prefix, StringComparison.Ordinal));
+#endif
 		}
 
 		/// <summary>
@@ -80,7 +86,7 @@ namespace DotNetOpenAuth {
 				return builder.ToString();
 			}
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Validates that a URL will be resolvable at runtime.
 		/// </summary>
@@ -113,5 +119,6 @@ namespace DotNetOpenAuth {
 				}
 			}
 		}
+#endif
 	}
 }

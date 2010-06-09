@@ -10,8 +10,9 @@ namespace DotNetOpenAuth {
 	using System.Globalization;
 	using DotNetOpenAuth.Loggers;
 	using DotNetOpenAuth.Messaging;
+#if !SILVERLIGHT
 	using log4net.Core;
-
+#endif
 	/// <summary>
 	/// A general logger for the entire DotNetOpenAuth library.
 	/// </summary>
@@ -177,7 +178,11 @@ namespace DotNetOpenAuth {
 		/// <param name="name">The name of the log to initialize.</param>
 		/// <returns>The <see cref="ILog"/> instance of the logger to use.</returns>
 		private static ILog InitializeFacade(string name) {
-			ILog result = Log4NetLogger.Initialize(name) ?? TraceLogger.Initialize(name) ?? NoOpLogger.Initialize();
+#if SILVERLIGHT
+			ILog result = /*Log4NetLogger.Initialize(name) ?? TraceLogger.Initialize(name) ?? */NoOpLogger.Initialize();
+#else
+            ILog result = Log4NetLogger.Initialize(name) ?? TraceLogger.Initialize(name) ?? NoOpLogger.Initialize();
+#endif
 			return result;
 		}
 	}

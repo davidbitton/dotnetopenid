@@ -7,7 +7,9 @@
 namespace DotNetOpenAuth.Messaging {
 	using System;
 	using System.Diagnostics;
+#if !SILVERLIGHT
 	using System.Net.Security;
+#endif
 	using System.Reflection;
 
 	/// <summary>
@@ -49,7 +51,7 @@ namespace DotNetOpenAuth.Messaging {
 			get { return this.name; }
 			private set { this.name = string.IsNullOrEmpty(value) ? null : value; }
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Gets or sets the level of protection required by this member in the serialized message.
 		/// </summary>
@@ -58,7 +60,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// that provide security.
 		/// </remarks>
 		public ProtectionLevel RequiredProtection { get; set; }
-
+#endif
 		/// <summary>
 		/// Gets or sets a value indicating whether this member is a required part of the serialized message.
 		/// </summary>

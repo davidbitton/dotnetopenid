@@ -88,6 +88,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// </summary>
 		/// <returns>The text reader, initialized for the proper encoding.</returns>
 		public override StreamReader GetResponseReader() {
+#if !SILVERLIGHT
 			this.ResponseStream.Seek(0, SeekOrigin.Begin);
 			string contentEncoding = this.Headers[HttpResponseHeader.ContentEncoding];
 			Encoding encoding = null;
@@ -100,6 +101,9 @@ namespace DotNetOpenAuth.Messaging {
 			}
 
 			return encoding != null ? new StreamReader(this.ResponseStream, encoding) : new StreamReader(this.ResponseStream);
+#else
+		    return null;
+#endif
 		}
 
 		/// <summary>
@@ -136,6 +140,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// </summary>
 		/// <param name="body">The string to set the response to.</param>
 		internal void SetResponse(string body) {
+#if !SILVERLIGHT
 			if (body == null) {
 				this.responseStream = null;
 				return;
@@ -148,6 +153,7 @@ namespace DotNetOpenAuth.Messaging {
 			writer.Write(body);
 			writer.Flush();
 			this.ResponseStream.Seek(0, SeekOrigin.Begin);
+#endif
 		}
 
 		/// <summary>

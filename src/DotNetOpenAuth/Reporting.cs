@@ -19,7 +19,9 @@ namespace DotNetOpenAuth {
 	using System.Security;
 	using System.Text;
 	using System.Threading;
+#if !SILVERLIGHT
 	using System.Web;
+#endif
 	using DotNetOpenAuth.Configuration;
 	using DotNetOpenAuth.Messaging;
 	using DotNetOpenAuth.Messaging.Bindings;
@@ -331,7 +333,7 @@ namespace DotNetOpenAuth {
 						observations.Add(observedRequests = new PersistentHashSet(file, "requests.txt", 3));
 						observations.Add(observedCultures = new PersistentHashSet(file, "cultures.txt", 20));
 						observations.Add(observedFeatures = new PersistentHashSet(file, "features.txt", int.MaxValue));
-
+#if !SILVERLIGHT
 						// Record site-wide features in use.
 						if (HttpContext.Current != null && HttpContext.Current.ApplicationInstance != null) {
 							// MVC or web forms?
@@ -339,7 +341,7 @@ namespace DotNetOpenAuth {
 							// url rewriting?
 							////RecordFeatureUse(IsMVC ? "ASP.NET MVC" : "ASP.NET Web Forms");
 						}
-
+#endif
 						initialized = true;
 					} catch (Exception e) {
 						// This is supposed to be as low-risk as possible, so if it fails, just disable reporting
@@ -409,8 +411,10 @@ namespace DotNetOpenAuth {
 		private static bool SendStats() {
 			try {
 				var request = (HttpWebRequest)WebRequest.Create(wellKnownPostLocation);
+#if !SILVERLIGHT
 				request.UserAgent = Util.LibraryVersion;
 				request.AllowAutoRedirect = false;
+#endif
 				request.Method = "POST";
 				request.ContentType = "text/dnoa-report1";
 				Stream report = GetReport();
@@ -465,7 +469,11 @@ namespace DotNetOpenAuth {
 		/// <param name="line">The line from the HTTP response to interpret as a log message.</param>
 		private static void DemuxLogMessage(string line) {
 			if (line != null) {
+#if SILVERLIGHT
+                string[] parts = line.Split(new char[] { ' ' }).Where(p => !String.IsNullOrEmpty(p)).ToArray();
+#else
 				string[] parts = line.Split(new char[] { ' ' }, 2);
+#endif
 				if (parts.Length == 2) {
 					string level = parts[0];
 					string message = parts[1];
@@ -532,19 +540,24 @@ namespace DotNetOpenAuth {
 			// and not catch exceptions from the last attempt so that
 			// the overall failure is caught by our caller.
 			try {
+#if SILVERLIGHT
+			    result = IsolatedStorageFile.GetUserStoreForApplication();
+#else
 				// This works on Personal Web Server
 				result = IsolatedStorageFile.GetUserStoreForDomain();
+#endif
 			} catch (SecurityException) {
 			} catch (IsolatedStorageException) {
 			}
-
+#if !SILVERLIGHT
 			// This works on IIS when full trust is granted.
 			if (result == null) {
 				result = IsolatedStorageFile.GetMachineStoreForDomain();
 			}
 
 			Logger.Library.InfoFormat("Reporting will use isolated storage with scope: {0}", result.Scope);
-			return result;
+#endif
+            return result;
 		}
 
 		/// <summary>
@@ -587,7 +600,11 @@ namespace DotNetOpenAuth {
 		/// <returns>The filename, with any and all invalid filename characters replaced with the hyphen (-) character.</returns>
 		private static string SanitizeFileName(string fileName) {
 			Contract.Requires<ArgumentException>(!String.IsNullOrEmpty(fileName));
-			char[] invalidCharacters = Path.GetInvalidFileNameChars();
+#if SILVERLIGHT
+		    char[] invalidCharacters = Path.GetInvalidPathChars(); 
+#else
+            char[] invalidCharacters = Path.GetInvalidFileNameChars();
+#endif       
 			if (fileName.IndexOfAny(invalidCharacters) < 0) {
 				return fileName; // nothing invalid about this filename.
 			}
@@ -807,7 +824,11 @@ namespace DotNetOpenAuth {
 				this.reader = new StreamReader(this.fileStream, Encoding.UTF8);
 				while (!this.reader.EndOfStream) {
 					string line = this.reader.ReadLine();
+#if SILVERLIGHT
+				    string[] parts = line.Split(separator).Where(p => !String.IsNullOrEmpty(p)).ToArray(); // remove empties
+#else
 					string[] parts = line.Split(separator, 2);
+#endif
 					int counter;
 					if (int.TryParse(parts[0], out counter)) {
 						string category = string.Empty;

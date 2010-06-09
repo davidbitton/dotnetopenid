@@ -13,10 +13,11 @@ namespace DotNetOpenAuth.Messaging {
 	using System.Globalization;
 	using System.IO;
 	using System.Net;
+#if !SILVERLIGHT
 	using System.Net.Mime;
 	using System.ServiceModel.Channels;
 	using System.Web;
-
+#endif
 	/// <summary>
 	/// A property store of details of an incoming HTTP request.
 	/// </summary>
@@ -26,6 +27,7 @@ namespace DotNetOpenAuth.Messaging {
 	/// of our one.
 	/// </remarks>
 	public class HttpRequestInfo {
+#if !SILVERLIGHT
 		/// <summary>
 		/// The key/value pairs found in the entity of a POST request.
 		/// </summary>
@@ -77,7 +79,7 @@ namespace DotNetOpenAuth.Messaging {
 
 			Reporting.RecordRequestStatistics(this);
 		}
-
+#endif
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HttpRequestInfo"/> class.
 		/// </summary>
@@ -102,7 +104,7 @@ namespace DotNetOpenAuth.Messaging {
 
 			Reporting.RecordRequestStatistics(this);
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HttpRequestInfo"/> class.
 		/// </summary>
@@ -141,7 +143,7 @@ namespace DotNetOpenAuth.Messaging {
 
 			Reporting.RecordRequestStatistics(this);
 		}
-
+#endif
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HttpRequestInfo"/> class.
 		/// </summary>
@@ -152,7 +154,7 @@ namespace DotNetOpenAuth.Messaging {
 			this.HttpMethod = "GET";
 			this.Headers = new WebHeaderCollection();
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HttpRequestInfo"/> class.
 		/// </summary>
@@ -187,7 +189,7 @@ namespace DotNetOpenAuth.Messaging {
 			get { return this.message; }
 			set { this.message = value; }
 		}
-
+#endif
 		/// <summary>
 		/// Gets or sets the verb in the request (i.e. GET, POST, etc.)
 		/// </summary>
@@ -226,7 +228,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// Gets or sets the entity, or body of the request, if any.
 		/// </summary>
 		internal Stream InputStream { get; set; }
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Gets the key/value pairs found in the entity of a POST request.
 		/// </summary>
@@ -290,7 +292,7 @@ namespace DotNetOpenAuth.Messaging {
 				return this.queryStringBeforeRewriting;
 			}
 		}
-
+#endif
 		/// <summary>
 		/// Gets a value indicating whether the request's URL was rewritten by ASP.NET
 		/// or some other module.
@@ -301,7 +303,7 @@ namespace DotNetOpenAuth.Messaging {
 		internal bool IsUrlRewritten {
 			get { return this.Url != this.UrlBeforeRewriting; }
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Gets the public facing URL for the given incoming HTTP request.
 		/// </summary>
@@ -373,7 +375,7 @@ namespace DotNetOpenAuth.Messaging {
 			Contract.Requires<ArgumentNullException>(request != null);
 			return GetPublicFacingUrl(request, request.ServerVariables);
 		}
-
+#endif
 		/// <summary>
 		/// Makes up a reasonable guess at the raw URL from the possibly rewritten URL.
 		/// </summary>
@@ -383,7 +385,7 @@ namespace DotNetOpenAuth.Messaging {
 			Contract.Requires<ArgumentNullException>(url != null);
 			return url.AbsolutePath + url.Query + url.Fragment;
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Converts a NameValueCollection to a WebHeaderCollection.
 		/// </summary>
@@ -408,7 +410,7 @@ namespace DotNetOpenAuth.Messaging {
 
 			return headers;
 		}
-
+#endif
 #if CONTRACTS_FULL
 		/// <summary>
 		/// Verifies conditions that should be true for any valid state of this object.

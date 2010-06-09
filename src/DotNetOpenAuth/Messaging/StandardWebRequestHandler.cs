@@ -117,6 +117,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// value, if set, shoud be Closed before throwing.</para>
 		/// </remarks>
 		public IncomingWebResponse GetResponse(HttpWebRequest request, DirectWebRequestOptions options) {
+#if SILVERLIGHT
+		    return null;
+#else
 			// This request MAY have already been prepared by GetRequestStream, but
 			// we have no guarantee, so do it just to be safe.
 			PrepareRequest(request, false);
@@ -171,6 +174,7 @@ namespace DotNetOpenAuth.Messaging {
 
 				throw ErrorUtilities.Wrap(ex, MessagingStrings.ErrorInRequestReplyMessage);
 			}
+#endif
 		}
 
 		#endregion
@@ -208,6 +212,9 @@ namespace DotNetOpenAuth.Messaging {
 		/// The stream where the POST entity can be written.
 		/// </returns>
 		private static Stream GetRequestStreamCore(HttpWebRequest request) {
+#if SILVERLIGHT
+		    return null;
+#else
 			PrepareRequest(request, true);
 
 			try {
@@ -217,7 +224,8 @@ namespace DotNetOpenAuth.Messaging {
 			} catch (WebException ex) {
 				throw ErrorUtilities.Wrap(ex, MessagingStrings.WebRequestFailed, request.RequestUri);
 			}
-		}
+#endif
+        }
 
 		/// <summary>
 		/// Prepares an HTTP request.
@@ -225,6 +233,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <param name="request">The request.</param>
 		/// <param name="preparingPost"><c>true</c> if this is a POST request whose headers have not yet been sent out; <c>false</c> otherwise.</param>
 		private static void PrepareRequest(HttpWebRequest request, bool preparingPost) {
+#if !SILVERLIGHT
 			Contract.Requires<ArgumentNullException>(request != null);
 
 			// Be careful to not try to change the HTTP headers that have already gone out.
@@ -235,6 +244,7 @@ namespace DotNetOpenAuth.Messaging {
 					request.UserAgent = userAgentValue;
 				}
 			}
-		}
+#endif
+        }
 	}
 }

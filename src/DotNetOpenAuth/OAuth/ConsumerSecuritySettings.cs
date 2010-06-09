@@ -8,7 +8,11 @@ namespace DotNetOpenAuth.OAuth {
 	/// <summary>
 	/// Security settings that are applicable to consumers.
 	/// </summary>
-	internal class ConsumerSecuritySettings : SecuritySettings {
+	internal class ConsumerSecuritySettings
+#if !SILVERLIGHT
+        : SecuritySettings 
+#endif
+    {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConsumerSecuritySettings"/> class.
 		/// </summary>

@@ -32,9 +32,13 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 		/// <summary>
 		/// A list of the consumed nonces.
 		/// </summary>
+#if SILVERLIGHT
+	    private readonly IDictionary<DateTime, List<string>> usedNonces = new Dictionary<DateTime, List<string>>();
+#else
 		private readonly SortedDictionary<DateTime, List<string>> usedNonces = new SortedDictionary<DateTime, List<string>>();
-
-		/// <summary>
+        //TODO: Verify need for SortedDictionary
+#endif
+        /// <summary>
 		/// A lock object used around accesses to the <see cref="usedNonces"/> field.
 		/// </summary>
 		private object nonceLock = new object();

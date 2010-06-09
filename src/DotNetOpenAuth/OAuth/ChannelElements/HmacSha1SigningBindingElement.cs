@@ -31,11 +31,20 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 		/// This method signs the message per OAuth 1.0 section 9.2.
 		/// </remarks>
 		protected override string GetSignature(ITamperResistantOAuthMessage message) {
+            //TODO: Find out of this can be UTF8 always (DB)
+#if SILVERLIGHT
+			string key = GetConsumerAndTokenSecretString(message);
+			HashAlgorithm hasher = new HMACSHA1(Encoding.UTF8.GetBytes(key));
+			string baseString = ConstructSignatureBaseString(message, this.Channel.MessageDescriptions.GetAccessor(message));
+			byte[] digest = hasher.ComputeHash(Encoding.UTF8.GetBytes(baseString));
+			return Convert.ToBase64String(digest);
+#else
 			string key = GetConsumerAndTokenSecretString(message);
 			HashAlgorithm hasher = new HMACSHA1(Encoding.ASCII.GetBytes(key));
 			string baseString = ConstructSignatureBaseString(message, this.Channel.MessageDescriptions.GetAccessor(message));
 			byte[] digest = hasher.ComputeHash(Encoding.ASCII.GetBytes(baseString));
 			return Convert.ToBase64String(digest);
+#endif
 		}
 
 		/// <summary>

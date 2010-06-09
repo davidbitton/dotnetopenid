@@ -12,7 +12,9 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
+#if !SILVERLIGHT
 	using System.Web;
+#endif
 	using DotNetOpenAuth.Messaging;
 	using DotNetOpenAuth.Messaging.Bindings;
 	using DotNetOpenAuth.Messaging.Reflection;
@@ -149,7 +151,10 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 		/// This method implements OAuth 1.0 section 9.1.
 		/// </remarks>
 		internal static string ConstructSignatureBaseString(ITamperResistantOAuthMessage message, MessageDictionary messageDictionary) {
-			Contract.Requires<ArgumentNullException>(message != null);
+#if SILVERLIGHT
+            return null;
+#else
+            Contract.Requires<ArgumentNullException>(message != null);
 			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(message.HttpMethod));
 			Contract.Requires<ArgumentNullException>(messageDictionary != null);
 			Contract.Requires<ArgumentException>(messageDictionary.Message == message);
@@ -231,7 +236,8 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 
 			Logger.Bindings.DebugFormat("Constructed signature base string: {0}", signatureBaseString);
 			return signatureBaseString.ToString();
-		}
+#endif
+        }
 
 		/// <summary>
 		/// Gets the "ConsumerSecret&amp;TokenSecret" string, allowing either property to be empty or null.

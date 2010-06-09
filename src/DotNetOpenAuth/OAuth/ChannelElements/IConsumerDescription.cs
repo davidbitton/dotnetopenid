@@ -21,7 +21,7 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 		/// Gets the consumer secret.
 		/// </summary>
 		string Secret { get; }
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Gets the certificate that can be used to verify the signature of an incoming
 		/// message from a Consumer.
@@ -31,7 +31,7 @@ namespace DotNetOpenAuth.OAuth.ChannelElements {
 		/// This property must be implemented only if the RSA-SHA1 algorithm is supported by the Service Provider.
 		/// </remarks>
 		X509Certificate2 Certificate { get; }
-
+#endif
 		/// <summary>
 		/// Gets the callback URI that this consumer has pre-registered with the service provider, if any.
 		/// </summary>

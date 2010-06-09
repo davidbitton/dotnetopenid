@@ -14,7 +14,9 @@ namespace DotNetOpenAuth.Messaging {
 	/// <summary>
 	/// An exception to represent errors in the local or remote implementation of the protocol.
 	/// </summary>
+#if !SILVERLIGHT
 	[Serializable]
+#endif
 	public class ProtocolException : Exception {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProtocolException"/> class.
@@ -48,7 +50,7 @@ namespace DotNetOpenAuth.Messaging {
 			Contract.Requires<ArgumentNullException>(faultedMessage != null);
 			this.FaultedMessage = faultedMessage;
 		}
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProtocolException"/> class.
 		/// </summary>
@@ -62,7 +64,7 @@ namespace DotNetOpenAuth.Messaging {
 			: base(info, context) {
 			throw new NotImplementedException();
 		}
-
+#endif
 		/// <summary>
 		/// Gets the message that caused the exception.
 		/// </summary>
@@ -80,6 +82,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// 	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Read="*AllFiles*" PathDiscovery="*AllFiles*"/>
 		/// 	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter"/>
 		/// </PermissionSet>
+#if !SILVERLIGHT
 #if CLR4
 		[SecurityCritical]
 #else
@@ -89,5 +92,6 @@ namespace DotNetOpenAuth.Messaging {
 			base.GetObjectData(info, context);
 			throw new NotImplementedException();
 		}
+#endif
 	}
 }

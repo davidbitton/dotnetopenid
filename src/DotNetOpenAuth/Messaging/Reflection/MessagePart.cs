@@ -12,12 +12,13 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 	using System.Diagnostics.Contracts;
 	using System.Globalization;
 	using System.Linq;
-	using System.Net.Security;
 	using System.Reflection;
 	using System.Xml;
-	using DotNetOpenAuth.Configuration;
+    using DotNetOpenAuth.Configuration;
+#if !SILVERLIGHT
+    using System.Net.Security;
 	using DotNetOpenAuth.OpenId;
-
+#endif
 	/// <summary>
 	/// Describes an individual member of a message and assists in its serialization.
 	/// </summary>
@@ -74,11 +75,13 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 				Contract.Assume(str != null);
 				return bool.Parse(str);
 			};
+#if !SILVERLIGHT
 			Func<string, Identifier> safeIdentifier = str => {
 				Contract.Assume(str != null);
 				ErrorUtilities.VerifyFormat(str.Length > 0, MessagingStrings.NonEmptyStringExpected);
 				return Identifier.Parse(str, true);
 			};
+#endif
 			Func<byte[], string> safeFromByteArray = bytes => {
 				Contract.Assume(bytes != null);
 				return Convert.ToBase64String(bytes);
@@ -87,6 +90,7 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 				Contract.Assume(str != null);
 				return Convert.FromBase64String(str);
 			};
+#if !SILVERLIGHT
 			Func<string, Realm> safeRealm = str => {
 				Contract.Assume(str != null);
 				return new Realm(str);
@@ -99,6 +103,7 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 			Map<bool>(value => value.ToString().ToLowerInvariant(), null, safeBool);
 			Map<CultureInfo>(c => c.Name, null, str => new CultureInfo(str));
 			Map<CultureInfo[]>(cs => string.Join(",", cs.Select(c => c.Name).ToArray()), null, str => str.Split(',').Select(s => new CultureInfo(s)).ToArray());
+#endif
 		}
 
 		/// <summary>
@@ -121,7 +126,9 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 			this.field = member as FieldInfo;
 			this.property = member as PropertyInfo;
 			this.Name = attribute.Name ?? member.Name;
+#if !SILVERLIGHT
 			this.RequiredProtection = attribute.RequiredProtection;
+#endif
 			this.IsRequired = attribute.IsRequired;
 			this.AllowEmpty = attribute.AllowEmpty;
 			this.memberDeclaredType = (this.field != null) ? this.field.FieldType : this.property.PropertyType;
@@ -175,12 +182,12 @@ namespace DotNetOpenAuth.Messaging.Reflection {
 		/// Gets or sets the name to use when serializing or deserializing this parameter in a message.
 		/// </summary>
 		internal string Name { get; set; }
-
+#if !SILVERLIGHT
 		/// <summary>
 		/// Gets or sets whether this message part must be signed.
 		/// </summary>
 		internal ProtectionLevel RequiredProtection { get; set; }
-
+#endif
 		/// <summary>
 		/// Gets or sets a value indicating whether this message part is required for the
 		/// containing message to be valid.
